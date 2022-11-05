@@ -1,0 +1,120 @@
+buildscript {
+    ext {
+        //@formatter:off
+        sbVersion      = '2.7.4'
+        junitVersion   = '5.9.0'
+        //@formatter:on
+    }
+
+    repositories {
+        gradlePluginPortal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath "org.openapitools:openapi-generator-gradle-plugin:6.2.1"
+
+        classpath "com.palantir.baseline:gradle-baseline-java:4.147.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:6.11.0"
+        classpath 'org.owasp:dependency-check-gradle:7.2.0'
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+    apply plugin: 'maven-publish'
+    apply plugin: 'idea'
+
+    apply plugin: "org.openapi.generator"
+
+    apply plugin: 'com.palantir.baseline-format'
+    apply plugin: "org.sonarqube"
+    apply plugin: 'org.owasp.dependencycheck'
+
+    group = 'com.40coderplus.flink.sql.gateway'
+    version = '1.0.0'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    java {
+        withSourcesJar()
+    }
+
+    plugins.withType(JavaPlugin) {
+        project.sourceCompatibility = JavaVersion.VERSION_11
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                groupId = 'com.fortycoderplus.flink.client'
+                artifactId = "sql-gateway-$project.name"
+                version = project.version
+
+                from components.java
+
+                pom {
+                    name = "Flink SQL Gateway Client :: $project.name"
+                    description = 'Flink SQL Gateway Client'
+                    url = 'https://github.com/40coderplus/flink-sql-gateway-client'
+                    developers {
+                        developer {
+                            id = '40CoderPlus'
+                            name = '40CoderPlus'
+                            email = '40CoderPlus@40coderplus.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git@github.com:40coderplus/flink-sql-gateway-client.git'
+                        url = 'https://github.com/40coderplus/flink-sql-gateway-client'
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                credentials {
+                    username "$nexusUsername"
+                    password "$nexusPassword"
+                }
+                def releasesRepoUrl = "https://maven.40coderplus.com/repository/maven-releases/"
+                def snapshotsRepoUrl = "https://maven.40coderplus.com/repository/maven-snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                allowInsecureProtocol = true
+            }
+        }
+    }
+
+    sonarqube {
+        properties {
+            property 'sonar.dependencyCheck.jsonReportPath', 'build/reports/dependency-check-report.json'
+            property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html'
+            property 'sonar.projectName', 'flink-sql-gateway:client'
+            property 'sonar.projectKey', 'flink-sql-gateway:client'
+        }
+    }
+
+    spotless {
+        java {
+            target 'src/main/java/**/*.java', 'src/test/java/**/*.java'
+
+            palantirJavaFormat()
+            formatAnnotations()
+        }
+    }
+}

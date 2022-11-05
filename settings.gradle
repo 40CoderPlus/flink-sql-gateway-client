@@ -1,0 +1,4 @@
+rootProject.name = 'flink-sql-gateway-client'
+include 'java-native'
+include 'rest-template'
+
