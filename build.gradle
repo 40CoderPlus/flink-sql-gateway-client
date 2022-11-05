@@ -1,10 +1,4 @@
 buildscript {
-    ext {
-        //@formatter:off
-        sbVersion      = '2.7.4'
-        junitVersion   = '5.9.0'
-        //@formatter:on
-    }
 
     repositories {
         gradlePluginPortal()
