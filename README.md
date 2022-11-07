@@ -19,8 +19,25 @@ gradle build -x test
 
 ```java
 DefaultApi api = new DefaultApi(new ApiClient());
-OpenSessionResponseBody openSessionResponseBody = api.openSession(
-        new OpenSessionRequestBody().sessionName("example").properties(Map.of("foo", "bar")));
+OpenSessionResponseBody response = api.openSession(new OpenSessionRequestBody()
+    .putPropertiesItem("execution.target", "yarn-session")
+    .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.enabled", "true")
+    .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.rm-ids", "rm1,rm2")
+    .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm1", "yarn01")
+    .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm2", "yarn01")
+    .putPropertiesItem("flink.hadoop.yarn.resourcemanager.cluster-id", "yarn-cluster")
+    .putPropertiesItem(
+            "flink.hadoop.yarn.client.failover-proxy-provider",
+            "org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider")
+    .putPropertiesItem("yarn.application.id", "application_1667789375191_XXXX"));
+System.out.println(response.getSessionHandle());
+    
+ExecuteStatementResponseBody executeStatementResponseBody = api.executeStatement(
+    UUID.fromString(response.getSessionHandle()),
+    new ExecuteStatementRequestBody()
+            .statement("select 1")
+            .putExecutionConfigItem("pipeline.name", "Flink SQL Gateway SDK Example"));
+System.out.println(executeStatementResponseBody.getOperationHandle());
 ```
 
 # Warning
