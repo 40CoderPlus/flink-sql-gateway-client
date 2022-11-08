@@ -40,6 +40,8 @@ ExecuteStatementResponseBody executeStatementResponseBody = api.executeStatement
 System.out.println(executeStatementResponseBody.getOperationHandle());
 ```
 
+See more in `FlinkSqlGatewayExample`.
+
 # Warning
 
 See issue [FLINK-29881](https://issues.apache.org/jira/browse/FLINK-29881).
