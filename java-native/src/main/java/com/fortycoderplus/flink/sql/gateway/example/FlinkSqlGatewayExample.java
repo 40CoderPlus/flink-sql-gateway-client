@@ -128,4 +128,35 @@ public class FlinkSqlGatewayExample {
                         .putExecutionConfigItem("pipeline.name", "Flink SQL Gateway SDK on YARN Example"));
         System.out.println(executeStatementResponseBody.getOperationHandle());
     }
+
+    public static void runOnYarnWithUDF(DefaultApi api) throws ApiException {
+        OpenSessionResponseBody response = api.openSession(new OpenSessionRequestBody()
+                .putPropertiesItem("execution.target", "yarn-session")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.enabled", "true")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.rm-ids", "rm1,rm2")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm1", "yarn01")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm2", "yarn01")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.cluster-id", "yarn-cluster")
+                .putPropertiesItem(
+                        "flink.hadoop.yarn.client.failover-proxy-provider",
+                        "org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider")
+                .putPropertiesItem("yarn.application.id", "application_1667789375191_XXXX"));
+
+        ExecuteStatementResponseBody statment1 = api.executeStatement(
+                UUID.fromString(response.getSessionHandle()),
+                new ExecuteStatementRequestBody()
+                        .statement("create TEMPORARY FUNCTION \n"
+                                + "    FakeFunction as 'com.fortycoderplus.flink.udf.FakeFunction'\n"
+                                + "using JAR 'hdfs://MyHdfsService/udf-test/fake-func.jar'")
+                        .putExecutionConfigItem("pipeline.name", "Flink SQL Gateway UDF on YARN Example"));
+        System.out.println(statment1.getOperationHandle());
+
+        ExecuteStatementResponseBody statment2 = api.executeStatement(
+                UUID.fromString(response.getSessionHandle()),
+                new ExecuteStatementRequestBody()
+                        .statement("select FakeFunction('Flink SQL Gateway UDF on YARN Example')")
+                        .putExecutionConfigItem(
+                                "pipeline.name", "Flink SQL Gateway UDF on YARN Example-" + UUID.randomUUID()));
+        System.out.println(statment2.getOperationHandle());
+    }
 }
