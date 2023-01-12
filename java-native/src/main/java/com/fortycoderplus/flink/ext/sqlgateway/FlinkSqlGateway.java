@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2022 40CoderPlus. All rights reserved.
+ * (c) Copyright 2023 40CoderPlus. All rights reserved.
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-package com.fortycoderplus.flink.sql.gateway;
+package com.fortycoderplus.flink.ext.sqlgateway;
 
-import com.fortycoderplus.flink.sql.gateway.api.DefaultApi;
-import com.fortycoderplus.flink.sql.gateway.invoker.ApiClient;
-import com.fortycoderplus.flink.sql.gateway.invoker.ApiException;
-import com.fortycoderplus.flink.sql.gateway.model.OpenSessionRequestBody;
-import com.fortycoderplus.flink.sql.gateway.model.OpenSessionResponseBody;
+import com.fortycoderplus.flink.ext.sqlgateway.api.DefaultApi;
+import com.fortycoderplus.flink.ext.sqlgateway.invoker.ApiClient;
+import com.fortycoderplus.flink.ext.sqlgateway.invoker.ApiException;
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionResponseBody;
 import java.util.Map;
 
 public class FlinkSqlGateway {

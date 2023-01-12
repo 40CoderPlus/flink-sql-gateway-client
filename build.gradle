@@ -56,7 +56,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                groupId = 'com.fortycoderplus.flink.client'
+                groupId = 'com.fortycoderplus.flink.ext'
                 artifactId = "sql-gateway-$project.name"
                 version = project.version
 

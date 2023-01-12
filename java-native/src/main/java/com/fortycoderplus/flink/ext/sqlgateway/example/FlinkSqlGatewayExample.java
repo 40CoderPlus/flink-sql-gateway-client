@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2022 40CoderPlus. All rights reserved.
+ * (c) Copyright 2023 40CoderPlus. All rights reserved.
  *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,15 +18,15 @@
  * limitations under the License.
  */
 
-package com.fortycoderplus.flink.sql.gateway.example;
+package com.fortycoderplus.flink.ext.sqlgateway.example;
 
-import com.fortycoderplus.flink.sql.gateway.FlinkSqlGateway;
-import com.fortycoderplus.flink.sql.gateway.api.DefaultApi;
-import com.fortycoderplus.flink.sql.gateway.invoker.ApiException;
-import com.fortycoderplus.flink.sql.gateway.model.ExecuteStatementRequestBody;
-import com.fortycoderplus.flink.sql.gateway.model.ExecuteStatementResponseBody;
-import com.fortycoderplus.flink.sql.gateway.model.OpenSessionRequestBody;
-import com.fortycoderplus.flink.sql.gateway.model.OpenSessionResponseBody;
+import com.fortycoderplus.flink.ext.sqlgateway.FlinkSqlGateway;
+import com.fortycoderplus.flink.ext.sqlgateway.api.DefaultApi;
+import com.fortycoderplus.flink.ext.sqlgateway.invoker.ApiException;
+import com.fortycoderplus.flink.ext.sqlgateway.model.ExecuteStatementRequestBody;
+import com.fortycoderplus.flink.ext.sqlgateway.model.ExecuteStatementResponseBody;
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionResponseBody;
 import java.util.UUID;
 
 public class FlinkSqlGatewayExample {

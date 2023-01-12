@@ -19,9 +19,9 @@ openApiGenerate {
     library = "resttemplate"
     inputSpec = "$rootDir/flink_sql_gateway_rest_v1.yml".toString()
     outputDir = "$buildDir/generated".toString()
-    apiPackage = "com.fortycoderplus.flink.sql.gateway.api"
-    invokerPackage = "com.fortycoderplus.flink.sql.gateway.invoker"
-    modelPackage = "com.fortycoderplus.flink.sql.gateway.model"
+    apiPackage = "com.fortycoderplus.flink.ext.sqlgateway.api"
+    invokerPackage = "com.fortycoderplus.flink.ext.sqlgateway.invoker"
+    modelPackage = "com.fortycoderplus.flink.ext.sqlgateway.model"
     configOptions = [
             dateLibrary: "java8"
     ]
