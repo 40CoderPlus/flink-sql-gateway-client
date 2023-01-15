@@ -42,6 +42,12 @@ System.out.println(executeStatementResponseBody.getOperationHandle());
 
 See more in `FlinkSqlGatewayExample`.
 
+# Easy Builder
+
+Build Flink SQl Gateway Rest API in fluent api.
+
+To Be done
+
 # Warning
 
 See issue [FLINK-29881](https://issues.apache.org/jira/browse/FLINK-29881).
