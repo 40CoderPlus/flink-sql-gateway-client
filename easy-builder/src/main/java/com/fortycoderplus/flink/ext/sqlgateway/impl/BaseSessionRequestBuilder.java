@@ -22,7 +22,6 @@ package com.fortycoderplus.flink.ext.sqlgateway.impl;
 
 import com.fortycoderplus.flink.ext.sqlgateway.SessionRequestBuilder;
 import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
-import java.util.Map;
 
 public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestBuilder<SELF>>
         implements SessionRequestBuilder<SELF> {
@@ -43,12 +42,6 @@ public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestB
     @Override
     public SELF property(String key, String value) {
         requestBody.putPropertiesItem(key, value);
-        return self;
-    }
-
-    @Override
-    public SELF properties(Map<String, String> properties) {
-        properties.forEach(requestBody::putPropertiesItem);
         return self;
     }
 }

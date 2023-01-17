@@ -57,5 +57,9 @@ public interface SessionRequestBuilder<SELF> {
      * @param properties properties
      * @return SELF return builder
      */
-    SELF properties(Map<String, String> properties);
+    @SuppressWarnings("unchecked")
+    default SELF properties(Map<String, String> properties) {
+        properties.forEach(this::property);
+        return (SELF) this;
+    }
 }
