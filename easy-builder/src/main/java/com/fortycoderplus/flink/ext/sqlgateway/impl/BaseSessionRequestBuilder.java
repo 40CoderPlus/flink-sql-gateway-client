@@ -27,11 +27,18 @@ public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestB
         implements SessionRequestBuilder<SELF> {
 
     private final SELF self;
-    protected final OpenSessionRequestBody requestBody = new OpenSessionRequestBody();
+    protected final OpenSessionRequestBody requestBody;
 
     @SuppressWarnings("unchecked")
     public BaseSessionRequestBuilder() {
         this.self = (SELF) this;
+        this.requestBody = new OpenSessionRequestBody();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected BaseSessionRequestBuilder(OpenSessionRequestBody requestBody) {
+        this.self = (SELF) this;
+        this.requestBody = requestBody;
     }
 
     @Override

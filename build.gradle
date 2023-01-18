@@ -24,13 +24,11 @@ subprojects {
     apply plugin: 'maven-publish'
     apply plugin: 'idea'
 
-    apply plugin: "org.openapi.generator"
-
     apply plugin: 'com.palantir.baseline-format'
     apply plugin: "org.sonarqube"
     apply plugin: 'org.owasp.dependencycheck'
 
-    group = 'com.40coderplus.flink.sql.gateway'
+    group = 'com.fortycoderplus.flink.sql.gateway'
     version = '1.0.0'
 
     repositories {

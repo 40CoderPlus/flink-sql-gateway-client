@@ -25,4 +25,34 @@ public class kubernetesSessionRequestBuilder extends BaseSessionRequestBuilder<k
         super();
         this.property("execution.target", "kubernetes-session");
     }
+
+    public kubernetesSessionRequestBuilder jobmanager(String jobmanager) {
+        property("jobmanager", jobmanager);
+        return this;
+    }
+
+    public kubernetesSessionRequestBuilder clusterId(String clusterId) {
+        property("kubernetes.cluster-id", clusterId);
+        return this;
+    }
+
+    public kubernetesSessionRequestBuilder namespace(String namespace) {
+        property("kubernetes.namespace", namespace);
+        return this;
+    }
+
+    public kubernetesSessionRequestBuilder serviceAccount(String serviceAccount) {
+        property("kubernetes.jobmanager.service-account", serviceAccount);
+        return this;
+    }
+
+    public kubernetesSessionRequestBuilder restAddress(String restAddress) {
+        property("restAddress", restAddress);
+        return this;
+    }
+
+    public kubernetesSessionRequestBuilder restPort(int restPort) {
+        property("restPort", String.valueOf(restPort));
+        return this;
+    }
 }

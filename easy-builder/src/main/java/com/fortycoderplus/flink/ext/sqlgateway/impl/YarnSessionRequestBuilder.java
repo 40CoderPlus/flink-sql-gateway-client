@@ -20,12 +20,18 @@
 
 package com.fortycoderplus.flink.ext.sqlgateway.impl;
 
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
 import java.util.stream.Stream;
 
 public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSessionRequestBuilder> {
 
     public YarnSessionRequestBuilder() {
         super();
+        this.property("execution.target", "yarn-session");
+    }
+
+    public YarnSessionRequestBuilder(OpenSessionRequestBody requestBody) {
+        super(requestBody);
         this.property("execution.target", "yarn-session");
     }
 
@@ -47,7 +53,7 @@ public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSes
      */
     public YarnHARequestBuilder ha() {
         this.property("flink.yarn.resourcemanager.ha.enabled", Boolean.TRUE.toString());
-        return new YarnHARequestBuilder();
+        return new YarnHARequestBuilder(requestBody);
     }
 
     /**
@@ -56,13 +62,17 @@ public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSes
      * @return YarnRequestBuilder
      */
     public YarnRequestBuilder single() {
-        return new YarnRequestBuilder();
+        return new YarnRequestBuilder(requestBody);
     }
 
-    static class YarnHARequestBuilder extends YarnSessionRequestBuilder {
+    public static class YarnHARequestBuilder extends YarnSessionRequestBuilder {
 
         public YarnHARequestBuilder() {
             super();
+        }
+
+        public YarnHARequestBuilder(OpenSessionRequestBody requestBody) {
+            super(requestBody);
         }
 
         public YarnHARequestBuilder rmIds(String rmIds) {
@@ -92,6 +102,13 @@ public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSes
             return this;
         }
 
+        public YarnHARequestBuilder failoverProxyProvider() {
+            this.property(
+                    "flink.yarn.failover-proxy-provider",
+                    "org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider");
+            return this;
+        }
+
         private void checkRM(String rmId) {
             if (Stream.of(requestBody
                             .getProperties()
@@ -103,10 +120,14 @@ public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSes
         }
     }
 
-    static class YarnRequestBuilder extends YarnSessionRequestBuilder {
+    public static class YarnRequestBuilder extends YarnSessionRequestBuilder {
 
         public YarnRequestBuilder() {
             super();
+        }
+
+        public YarnRequestBuilder(OpenSessionRequestBody requestBody) {
+            super(requestBody);
         }
 
         public YarnRequestBuilder address(String address) {
