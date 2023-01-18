@@ -20,10 +20,108 @@
 
 package com.fortycoderplus.flink.ext.sqlgateway.impl;
 
+import java.util.stream.Stream;
+
 public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSessionRequestBuilder> {
 
     public YarnSessionRequestBuilder() {
         super();
         this.property("execution.target", "yarn-session");
+    }
+
+    public YarnSessionRequestBuilder(String applicationId) {
+        super();
+        this.property("execution.target", "yarn-session");
+        applicationId(applicationId);
+    }
+
+    public YarnSessionRequestBuilder applicationId(String applicationId) {
+        this.property("yarn.application.id", applicationId);
+        return this;
+    }
+
+    /**
+     * High Availability YARN ResourceManager builder
+     *
+     * @return YarnHARequestBuilder
+     */
+    public YarnHARequestBuilder ha() {
+        this.property("flink.yarn.resourcemanager.ha.enabled", Boolean.TRUE.toString());
+        return new YarnHARequestBuilder();
+    }
+
+    /**
+     * Single YARN ResourceManager builder
+     *
+     * @return YarnRequestBuilder
+     */
+    public YarnRequestBuilder single() {
+        return new YarnRequestBuilder();
+    }
+
+    static class YarnHARequestBuilder extends YarnSessionRequestBuilder {
+
+        public YarnHARequestBuilder() {
+            super();
+        }
+
+        public YarnHARequestBuilder rmIds(String rmIds) {
+            this.property("flink.yarn.resourcemanager.ha.rm-ids", rmIds);
+            return this;
+        }
+
+        public YarnHARequestBuilder clusterId(String clusterId) {
+            this.property("flink.yarn.resourcemanager.cluster-id", clusterId);
+            return this;
+        }
+
+        public YarnHARequestBuilder hostnameX(String rmId, String hostname) {
+            checkRM(rmId);
+            this.property("flink.yarn.resourcemanager.hostname." + rmId, hostname);
+            return this;
+        }
+
+        public YarnHARequestBuilder webappAddressX(String rmId, String webappAddress) {
+            checkRM(rmId);
+            this.property("flink.yarn.resourcemanager.webapp.address." + rmId, webappAddress);
+            return this;
+        }
+
+        public YarnHARequestBuilder failoverProxyProvider(String failoverProxyProvider) {
+            this.property("flink.yarn.failover-proxy-provider", failoverProxyProvider);
+            return this;
+        }
+
+        private void checkRM(String rmId) {
+            if (Stream.of(requestBody
+                            .getProperties()
+                            .getOrDefault("flink.yarn.resourcemanager.ha.rm-ids", "")
+                            .split(","))
+                    .noneMatch(rmId::equals)) {
+                throw new IllegalArgumentException("Please set rmIds correct");
+            }
+        }
+    }
+
+    static class YarnRequestBuilder extends YarnSessionRequestBuilder {
+
+        public YarnRequestBuilder() {
+            super();
+        }
+
+        public YarnRequestBuilder address(String address) {
+            this.property("flink.yarn.resourcemanager.address", address);
+            return this;
+        }
+
+        public YarnRequestBuilder schedulerAddress(String schedulerAddress) {
+            this.property("flink.yarn.resourcemanager.scheduler.address", schedulerAddress);
+            return this;
+        }
+
+        public YarnRequestBuilder webappAddress(String webappAddress) {
+            this.property("flink.yarn.resourcemanager.webapp.address", webappAddress);
+            return this;
+        }
     }
 }

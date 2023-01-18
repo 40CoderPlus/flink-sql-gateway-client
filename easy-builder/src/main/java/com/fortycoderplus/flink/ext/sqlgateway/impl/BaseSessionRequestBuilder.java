@@ -27,7 +27,7 @@ public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestB
         implements SessionRequestBuilder<SELF> {
 
     private final SELF self;
-    private final OpenSessionRequestBody requestBody = new OpenSessionRequestBody();
+    protected final OpenSessionRequestBody requestBody = new OpenSessionRequestBody();
 
     @SuppressWarnings("unchecked")
     public BaseSessionRequestBuilder() {
@@ -42,6 +42,12 @@ public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestB
     @Override
     public SELF property(String key, String value) {
         requestBody.putPropertiesItem(key, value);
+        return self;
+    }
+
+    @Override
+    public SELF sessionName(String sessionName) {
+        requestBody.sessionName(sessionName);
         return self;
     }
 }

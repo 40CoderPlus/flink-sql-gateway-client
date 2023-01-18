@@ -62,4 +62,18 @@ public interface SessionRequestBuilder<SELF> {
         properties.forEach(this::property);
         return (SELF) this;
     }
+
+    /**
+     * Recover job from savepoint/checkpoint.
+     *
+     * @param savepoint savepoint path
+     * @return SELF return builder
+     */
+    @SuppressWarnings("unchecked")
+    default SELF savepoint(String savepoint) {
+        property("execution.savepoint.path", savepoint);
+        return (SELF) this;
+    }
+
+    SELF sessionName(String sessionName);
 }
