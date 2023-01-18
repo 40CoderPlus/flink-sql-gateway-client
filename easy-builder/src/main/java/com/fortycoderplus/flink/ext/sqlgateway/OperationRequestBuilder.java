@@ -20,4 +20,61 @@
 
 package com.fortycoderplus.flink.ext.sqlgateway;
 
-public interface OperationRequestBuilder {}
+/**
+ * Builder for build operation execute config
+ */
+public interface OperationRequestBuilder<SELF> {
+
+    /**
+     * SQL Statement to submit to Flink Cluster
+     *
+     * @param statement Flink SQL statement
+     * @return SELF return builder
+     */
+    SELF statement(String statement);
+
+    /**
+     * Set Execution Timeout
+     *
+     * @param timeout execution timeout
+     * @return SELF return builder
+     */
+    SELF timeout(Long timeout);
+
+    /**
+     * Streaming Mode
+     *
+     * @return SELF return builder
+     */
+    default SELF streaming() {
+        return executeConfig("execution.runtime-mode", "STREAMING");
+    }
+
+    /**
+     * Batch Mode
+     *
+     * @return SELF return builder
+     */
+    default SELF batch() {
+        return executeConfig("execution.runtime-mode", "BATCH");
+    }
+
+    /**
+     * Set Statement Pipeline Name
+     *
+     * @param pipelineName Flink Pipeline Name
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF pipelineName(String pipelineName) {
+        return executeConfig("pipeline.ame", pipelineName);
+    }
+
+    /**
+     * Add a special config to Statement Execute Config
+     *
+     * @param key Execute Config Key
+     * @param value Execute Config Value
+     * @return SELF OperationRequestBuilder
+     */
+    SELF executeConfig(String key, String value);
+}

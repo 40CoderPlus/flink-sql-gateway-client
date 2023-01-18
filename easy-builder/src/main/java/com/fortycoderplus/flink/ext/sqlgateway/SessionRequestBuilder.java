@@ -69,10 +69,8 @@ public interface SessionRequestBuilder<SELF> {
      * @param savepoint savepoint path
      * @return SELF return builder
      */
-    @SuppressWarnings("unchecked")
     default SELF savepoint(String savepoint) {
-        property("execution.savepoint.path", savepoint);
-        return (SELF) this;
+        return property("execution.savepoint.path", savepoint);
     }
 
     SELF sessionName(String sessionName);
