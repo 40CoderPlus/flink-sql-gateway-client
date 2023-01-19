@@ -23,7 +23,8 @@ package com.fortycoderplus.flink.ext.sqlgateway.impl;
 import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
 import java.util.stream.Stream;
 
-public class YarnSessionRequestBuilder extends BaseSessionRequestBuilder<YarnSessionRequestBuilder> {
+public class YarnSessionRequestBuilder
+        extends BaseSessionRequestBuilder<YarnSessionRequestBuilder, OpenSessionRequestBody> {
 
     public YarnSessionRequestBuilder() {
         super();

@@ -22,10 +22,13 @@ package com.fortycoderplus.flink.ext.sqlgateway;
 
 import com.fortycoderplus.flink.ext.sqlgateway.impl.YarnSessionRequestBuilder;
 import com.fortycoderplus.flink.ext.sqlgateway.impl.kubernetesSessionRequestBuilder;
-import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
 import java.util.Map;
 
-public interface SessionRequestBuilder<SELF> {
+/**
+ * Builder for build open session.
+ * Notice, only for endpoint: POST: /sessions
+ */
+public interface SessionRequestBuilder<SELF, RESULT> {
 
     static YarnSessionRequestBuilder yarn() {
         return new YarnSessionRequestBuilder();
@@ -40,7 +43,7 @@ public interface SessionRequestBuilder<SELF> {
      *
      * @return OpenSessionRequestBody
      */
-    OpenSessionRequestBody build();
+    RESULT build();
 
     /**
      * Add a property

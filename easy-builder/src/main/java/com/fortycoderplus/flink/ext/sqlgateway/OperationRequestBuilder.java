@@ -20,10 +20,23 @@
 
 package com.fortycoderplus.flink.ext.sqlgateway;
 
+import com.fortycoderplus.flink.ext.sqlgateway.impl.BaseOperationRequestBuilder;
+
 /**
  * Builder for build operation execute config
+ * Notice:only for endpoint: POST: /sessions/{session_handle}/statements
  */
-public interface OperationRequestBuilder<SELF> {
+public interface OperationRequestBuilder<SELF, EXECUTION> {
+
+    static BaseOperationRequestBuilder builder() {
+        return new BaseOperationRequestBuilder();
+    }
+
+    /**
+     *
+     * @return EXECUTION. execution to submit to flink sql gateway
+     */
+    EXECUTION build();
 
     /**
      * SQL Statement to submit to Flink Cluster

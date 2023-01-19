@@ -20,7 +20,10 @@
 
 package com.fortycoderplus.flink.ext.sqlgateway.impl;
 
-public class kubernetesSessionRequestBuilder extends BaseSessionRequestBuilder<kubernetesSessionRequestBuilder> {
+import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
+
+public class kubernetesSessionRequestBuilder
+        extends BaseSessionRequestBuilder<kubernetesSessionRequestBuilder, OpenSessionRequestBody> {
     public kubernetesSessionRequestBuilder() {
         super();
         this.property("execution.target", "kubernetes-session");

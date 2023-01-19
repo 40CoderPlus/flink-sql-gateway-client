@@ -23,8 +23,8 @@ package com.fortycoderplus.flink.ext.sqlgateway.impl;
 import com.fortycoderplus.flink.ext.sqlgateway.SessionRequestBuilder;
 import com.fortycoderplus.flink.ext.sqlgateway.model.OpenSessionRequestBody;
 
-public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestBuilder<SELF>>
-        implements SessionRequestBuilder<SELF> {
+public abstract class BaseSessionRequestBuilder<SELF extends BaseSessionRequestBuilder<SELF, RESULT>, RESULT>
+        implements SessionRequestBuilder<SELF, OpenSessionRequestBody> {
 
     private final SELF self;
     protected final OpenSessionRequestBody requestBody;
