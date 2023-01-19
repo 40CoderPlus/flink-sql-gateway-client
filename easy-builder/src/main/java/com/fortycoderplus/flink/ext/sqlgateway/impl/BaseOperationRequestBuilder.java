@@ -26,6 +26,7 @@ import com.fortycoderplus.flink.ext.sqlgateway.util.DurationFormatter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BaseOperationRequestBuilder
         implements OperationRequestBuilder<BaseOperationRequestBuilder, ExecuteStatementRequestBody> {
@@ -67,6 +68,7 @@ public class BaseOperationRequestBuilder
 
     @Override
     public ExecuteStatementRequestBody build() {
+        Objects.requireNonNull(requestBody.getStatement(), "statement must have value");
         return requestBody;
     }
 
@@ -78,13 +80,21 @@ public class BaseOperationRequestBuilder
 
     public BaseOperationRequestBuilder statementSet(List<String> statements) {
         requestBody.statement(String.join(
-                System.lineSeparator(), "EXECUTE STATEMENT SET BEGIN", String.join(";", statements), "END"));
+                System.lineSeparator(),
+                "EXECUTE STATEMENT SET",
+                "BEGIN",
+                String.join(";" + System.lineSeparator(), statements),
+                "END"));
         return this;
     }
 
     public BaseOperationRequestBuilder statementSet(String... statements) {
         requestBody.statement(String.join(
-                System.lineSeparator(), "EXECUTE STATEMENT SET BEGIN", String.join(";", statements), "END"));
+                System.lineSeparator(),
+                "EXECUTE STATEMENT SET",
+                "BEGIN",
+                String.join(";" + System.lineSeparator(), statements),
+                "END"));
         return this;
     }
 
@@ -95,9 +105,9 @@ public class BaseOperationRequestBuilder
     }
 
     @Override
-    public BaseOperationRequestBuilder streaming() {
+    public CheckpointingBuilder streaming() {
         OperationRequestBuilder.super.streaming();
-        return this;
+        return new CheckpointingBuilder(requestBody);
     }
 
     @Override

@@ -79,7 +79,7 @@ public interface OperationRequestBuilder<SELF, EXECUTION> {
      * @return SELF OperationRequestBuilder
      */
     default SELF pipelineName(String pipelineName) {
-        return executeConfig("pipeline.ame", pipelineName);
+        return executeConfig("pipeline.name", pipelineName);
     }
 
     /**
