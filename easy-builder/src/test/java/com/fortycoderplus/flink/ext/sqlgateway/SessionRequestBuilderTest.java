@@ -49,7 +49,7 @@ class SessionRequestBuilderTest {
         OpenSessionRequestBody haBody = SessionRequestBuilder.yarn()
                 .sessionName("ha yarn session")
                 .applicationId("application_1667789375191_XXXX")
-                .savepoint("hdfs://fortycoderplus/fortycoderplus/flink/savepoints/savepoint-c12453-134defccc7c1")
+                .savepoint("hdfs://fortycoderplus/flink/savepoints/savepoint-c12453-134defccc7c1")
                 .ha()
                 .clusterId("fortycoderplus")
                 .rmIds("yarn1,yarn2")

@@ -46,7 +46,39 @@ See more in `FlinkSqlGatewayExample`.
 
 Build Flink SQl Gateway Rest API in fluent api.
 
-To Be done
+## Build session request body
+
+```java
+SessionRequestBuilder.yarn()
+    .sessionName("ha yarn session")
+    .applicationId("application_1667789375191_XXXX")
+    .savepoint("hdfs://fortycoderplus/flink/savepoints/savepoint-c12453-134defccc7c1")
+    .ha()
+        .clusterId("fortycoderplus")
+        .rmIds("yarn1,yarn2")
+        .hostnameX("yarn1", "yarn1.fortycoderplus")
+        .hostnameX("yarn2", "yarn2.fortycoderplus")
+        .failoverProxyProvider()
+        .webappAddressX("yarn1", "http://yarn1.fortycoderplus:8080")
+        .webappAddressX("yarn2", "http://yarn2.fortycoderplus:8080")
+```
+See more example in [SessionRequestBuilderTest](easy-builder/src/test/java/com/fortycoderplus/flink/ext/sqlgateway/SessionRequestBuilderTest.java)
+
+## Build execute statement request body
+
+```java
+OperationRequestBuilder.builder()
+    .pipelineName("test")
+    .streaming()
+        .maxConcurrentCheckpoints(1)
+        .storage()
+        .backend()
+        .noExternalizedCheckpoints()
+    .statement("select * from kafka_table")
+    .build();
+```
+
+See more example in [OperationRequestBuilderTest](easy-builder/src/test/java/com/fortycoderplus/flink/ext/sqlgateway/OperationRequestBuilderTest.java)
 
 # Warning
 
