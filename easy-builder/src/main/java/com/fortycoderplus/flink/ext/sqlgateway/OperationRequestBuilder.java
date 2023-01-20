@@ -21,6 +21,7 @@
 package com.fortycoderplus.flink.ext.sqlgateway;
 
 import com.fortycoderplus.flink.ext.sqlgateway.impl.BaseOperationRequestBuilder;
+import com.fortycoderplus.flink.ext.sqlgateway.util.MemoryUnit;
 
 /**
  * Builder for build operation execute config
@@ -33,10 +34,58 @@ public interface OperationRequestBuilder<SELF, EXECUTION> {
     }
 
     /**
-     *
      * @return EXECUTION. execution to submit to flink sql gateway
      */
     EXECUTION build();
+
+    /**
+     * Set Statement Pipeline Name
+     *
+     * @param pipelineName Flink Pipeline Name
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF pipelineName(String pipelineName) {
+        return executeConfig("pipeline.name", pipelineName);
+    }
+
+    /**
+     * The default parallelism used when no parallelism is specified anywhere (default: 1).
+     *
+     * @param parallelism number of parallelism
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF parallelism(int parallelism) {
+        return executeConfig("parallelism.default", String.valueOf(parallelism));
+    }
+
+    /**
+     * The number of slots that a TaskManager offers
+     * @param numberOfTaskSlots The number of slots that a TaskManager offers
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF numberOfTaskSlots(int numberOfTaskSlots) {
+        return executeConfig("taskmanager.numberOfTaskSlots", String.valueOf(numberOfTaskSlots));
+    }
+
+    /**
+     * Total Process Memory size for the TaskExecutors
+     * @param number number of memory
+     * @param unit unit of memory
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF taskmanagerMemoryProcessSize(int number, MemoryUnit unit) {
+        return executeConfig("taskmanager.memory.process.size", String.format("%d %s", number, unit.getUnits()[1]));
+    }
+
+    /**
+     * Total Flink Memory size for the TaskExecutors.
+     * @param number number of memory
+     * @param unit unit of memory
+     * @return SELF OperationRequestBuilder
+     */
+    default SELF taskmanagerMemoryFlinkSize(int number, MemoryUnit unit) {
+        return executeConfig("taskmanager.memory.flink.size", String.format("%d %s", number, unit.getUnits()[1]));
+    }
 
     /**
      * SQL Statement to submit to Flink Cluster
@@ -70,16 +119,6 @@ public interface OperationRequestBuilder<SELF, EXECUTION> {
      */
     default SELF batch() {
         return executeConfig("execution.runtime-mode", "BATCH");
-    }
-
-    /**
-     * Set Statement Pipeline Name
-     *
-     * @param pipelineName Flink Pipeline Name
-     * @return SELF OperationRequestBuilder
-     */
-    default SELF pipelineName(String pipelineName) {
-        return executeConfig("pipeline.name", pipelineName);
     }
 
     /**

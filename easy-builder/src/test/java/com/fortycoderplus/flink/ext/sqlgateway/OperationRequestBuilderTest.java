@@ -56,7 +56,7 @@ class OperationRequestBuilderTest {
 
     @Test
     void batch() {
-        builder.streaming();
+        builder.pipelineName("streaming").streaming();
         assertEquals("STREAMING", builder.build().getExecutionConfig().get("execution.runtime-mode"));
         ExecuteStatementRequestBody body = builder.streaming()
                 .maxConcurrentCheckpoints(1)
