@@ -1,12 +1,14 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
 apply plugin: 'org.openapi.generator'
 
 dependencies {
     implementation 'io.swagger:swagger-annotations:1.6.8'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.4'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.4'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4.2'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2'
     implementation 'org.openapitools:jackson-databind-nullable:0.2.4'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.0'
 
@@ -18,7 +20,7 @@ dependencies {
 openApiGenerate {
     generatorName = 'java'
     library = 'native'
-    inputSpec = "$rootDir/flink_sql_gateway_rest_v1.yml".toString()
+    inputSpec = "$rootDir/spec/rest_v2_sql_gateway.yml".toString()
     outputDir = "$buildDir/generated".toString()
     apiPackage = 'com.fortycoderplus.flink.ext.sqlgateway.api'
     invokerPackage = 'com.fortycoderplus.flink.ext.sqlgateway.invoker'
@@ -28,4 +30,17 @@ openApiGenerate {
     ]
 }
 
-sourceSets.main.java.srcDirs += ["$buildDir/generated/src/main/java"]
+task buildV1SDK(type: GenerateTask) {
+    generatorName = 'java'
+    library = 'native'
+    inputSpec = "$rootDir/spec/rest_v1_sql_gateway.yml".toString()
+    outputDir = "$buildDir/generatedv1".toString()
+    apiPackage = 'com.fortycoderplus.flink.ext.sqlgateway.apiv1'
+    invokerPackage = 'com.fortycoderplus.flink.ext.sqlgateway.invokerv1'
+    modelPackage = 'com.fortycoderplus.flink.ext.sqlgateway.modelv1'
+    configOptions = [
+            dateLibrary: 'java8'
+    ]
+}
+
+sourceSets.main.java.srcDirs += ["$buildDir/generated/src/main/java", "$buildDir/generatedv1/src/main/java"]

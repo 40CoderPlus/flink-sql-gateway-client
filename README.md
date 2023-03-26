@@ -1,6 +1,8 @@
 # Notice
 
-Some Changes in `flink_sql_gateway_rest_v1.yml`:
+Default Open API specification version is v2. See in [Flink SQL Gateway REST API](https://nightlies.apache.org/flink/flink-docs-release-1.17/docs/dev/table/sql-gateway/rest/#rest-api)
+
+Some Changes in [Open API v1 specification](spec/rest_v1_sql_gateway.yml),[Open API v2 specification](spec/rest_v2_sql_gateway.yml)
 
 1. `session_handle` in path parameter change to type `UUID`;
 2. `operation_handle` in path parameter change to type `UUID`;
@@ -9,9 +11,18 @@ Some Changes in `flink_sql_gateway_rest_v1.yml`:
 
 Use [OpenAPI Generator](https://github.com/OpenAPITools/openapi-generator) to generation client SDKs.
 
+- Version V2
+
 ```shell
 gradle clean
 gradle openApiGenerate
+gradle build -x test
+```
+
+- Version V1
+```shell
+gradle clean
+gradle buildV1SDK
 gradle build -x test
 ```
 
