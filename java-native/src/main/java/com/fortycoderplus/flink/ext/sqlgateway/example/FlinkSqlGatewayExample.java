@@ -35,8 +35,15 @@ public class FlinkSqlGatewayExample {
 
     public static void main(String[] args) throws ApiException {
         DefaultApi api = FlinkSqlGateway.sqlGatewayApi("http://127.0.0.1:8083");
+        // run on K8S/YARN
         runOnYarn(api);
         runOnKubernetes(api);
+
+        // run with UDF
+        runOnYarnWithUDF(api);
+
+        // run stop job. Flink SQL Gateway support stop statement since Flink 1.17
+        stopJob(api);
     }
 
     private static void runOnKubernetes(DefaultApi api) throws ApiException {
@@ -158,5 +165,26 @@ public class FlinkSqlGatewayExample {
                         .putExecutionConfigItem(
                                 "pipeline.name", "Flink SQL Gateway UDF on YARN Example-" + UUID.randomUUID()));
         System.out.println(statment2.getOperationHandle());
+    }
+
+    private static void stopJob(DefaultApi api) throws ApiException {
+        OpenSessionResponseBody response = api.openSession(new OpenSessionRequestBody()
+                .putPropertiesItem("execution.target", "yarn-session")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.enabled", "true")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.ha.rm-ids", "rm1,rm2")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm1", "yarn01")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.hostname.rm2", "yarn01")
+                .putPropertiesItem("flink.hadoop.yarn.resourcemanager.cluster-id", "yarn-cluster")
+                .putPropertiesItem(
+                        "flink.hadoop.yarn.client.failover-proxy-provider",
+                        "org.apache.hadoop.yarn.client.ConfiguredRMFailoverProxyProvider")
+                .putPropertiesItem("yarn.application.id", "application_1667789375191_XXXX"));
+        System.out.println(response.getSessionHandle());
+        ExecuteStatementResponseBody executeStatementResponseBody = api.executeStatement(
+                UUID.fromString(response.getSessionHandle()),
+                new ExecuteStatementRequestBody()
+                        .putExecutionConfigItem("state.savepoints.dir", "hdfs://FortyCoderPlus/savepoints")
+                        .statement("stop job '89ea3d3410cc8fa8c8c5bb44fc6e8a7f' with SAVEPOINT"));
+        System.out.println(executeStatementResponseBody.getOperationHandle());
     }
 }

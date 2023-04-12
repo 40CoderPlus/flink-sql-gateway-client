@@ -37,6 +37,7 @@ public class BaseOperationRequestBuilder
     private static final String STATE_BACKEND = "state.backend";
     private static final String STATE_CHECKPOINT_STORAGE = "state.checkpoint-storage";
     private static final String STATE_CHECKPOINTS_DIR = "state.checkpoints.dir";
+    private static final String STATE_SAVEPOINTS_DIR = "state.savepoints.dir";
     private static final String EXECUTION_CHECKPOINTING_INTERVAL = "execution.checkpointing.interval";
     private static final String EXECUTION_CHECKPOINTING_MIN_PAUSE = "execution.checkpointing.min-pause";
     private static final String EXECUTION_CHECKPOINTING_TIMEOUT = "execution.checkpointing.timeout";
@@ -44,8 +45,9 @@ public class BaseOperationRequestBuilder
             "execution.checkpointing.externalized-checkpoint-retention";
     private static final String EXECUTION_CHECKPOINTING_MAX_CONCURRENT_CHECKPOINTS =
             "execution.checkpointing.max-concurrent-checkpoints";
+    private static final String EXECUTION_SAVEPOINT_PATH = "execution.savepoint.path";
 
-    private static List<String> keys = new ArrayList<>() {
+    private static final List<String> keys = new ArrayList<>() {
         {
             add(STATE_BACKEND);
             add(STATE_CHECKPOINT_STORAGE);
@@ -188,6 +190,40 @@ public class BaseOperationRequestBuilder
         public CheckpointingBuilder noExternalizedCheckpoints() {
             executeConfig(EXECUTION_CHECKPOINTING_EXTERNALIZED_CHECKPOINT_RETENTION, "NO_EXTERNALIZED_CHECKPOINTS");
             return this;
+        }
+    }
+
+    public static class StopJobBuilder extends BaseOperationRequestBuilder {
+
+        private static final String STOP_STATEMENT_FORMATTER = "stop '%s'";
+        private static final String STOP_STATEMENT_WITH_SAVEPOINT_FORMATTER = "stop '%s' WITH SAVEPOINT";
+
+        private String jobId;
+        private boolean withSavepoint = false;
+
+        public StopJobBuilder(ExecuteStatementRequestBody requestBody) {
+            super(requestBody);
+        }
+
+        public StopJobBuilder savepoint(String savepointPath) {
+            executeConfig(STATE_SAVEPOINTS_DIR, savepointPath);
+            this.withSavepoint = true;
+            return this;
+        }
+
+        public StopJobBuilder jobId(String jobId) {
+            this.jobId = jobId;
+            return this;
+        }
+
+        @Override
+        public ExecuteStatementRequestBody build() {
+            Objects.requireNonNull(jobId, "Flink Job id can't be null");
+            statement(
+                    withSavepoint
+                            ? String.format(STOP_STATEMENT_WITH_SAVEPOINT_FORMATTER, jobId)
+                            : String.format(STOP_STATEMENT_FORMATTER, jobId));
+            return super.build();
         }
     }
 }
