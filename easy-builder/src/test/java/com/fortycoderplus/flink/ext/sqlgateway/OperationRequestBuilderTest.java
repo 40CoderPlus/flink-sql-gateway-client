@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fortycoderplus.flink.ext.sqlgateway.impl.BaseOperationRequestBuilder;
 import com.fortycoderplus.flink.ext.sqlgateway.model.ExecuteStatementRequestBody;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,18 +46,27 @@ class OperationRequestBuilderTest {
     @Test
     void timeout() {
         builder.timeout(1L);
+        Assertions.assertThrowsExactly(NullPointerException.class, () -> builder.build());
+
+        builder.statement("select 1");
         assertEquals(1L, builder.build().getExecutionTimeout());
     }
 
     @Test
     void streaming() {
         builder.streaming();
+        Assertions.assertThrowsExactly(NullPointerException.class, () -> builder.build());
+
+        builder.statement("select 1");
         assertEquals("STREAMING", builder.build().getExecutionConfig().get("execution.runtime-mode"));
     }
 
     @Test
     void batch() {
         builder.pipelineName("streaming").streaming();
+        Assertions.assertThrowsExactly(NullPointerException.class, () -> builder.build());
+
+        builder.statement("select 1");
         assertEquals("STREAMING", builder.build().getExecutionConfig().get("execution.runtime-mode"));
         ExecuteStatementRequestBody body = builder.streaming()
                 .maxConcurrentCheckpoints(1)
@@ -64,12 +74,15 @@ class OperationRequestBuilderTest {
                 .backend()
                 .noExternalizedCheckpoints()
                 .build();
-        assertEquals(5, body.getExecutionConfig().size());
+        assertEquals(6, body.getExecutionConfig().size());
     }
 
     @Test
     void pipelineName() {
         builder.pipelineName("test1");
+        Assertions.assertThrowsExactly(NullPointerException.class, () -> builder.build());
+
+        builder.statement("select 1");
         assertEquals("test1", builder.build().getExecutionConfig().get("pipeline.name"));
         builder.pipelineName("test2");
         assertEquals("test2", builder.build().getExecutionConfig().get("pipeline.name"));
@@ -80,6 +93,7 @@ class OperationRequestBuilderTest {
         assertEquals(
                 1,
                 builder.executeConfig("key1", "key2")
+                        .statement("select 1")
                         .build()
                         .getExecutionConfig()
                         .size());

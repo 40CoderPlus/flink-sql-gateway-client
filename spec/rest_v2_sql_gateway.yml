@@ -6,7 +6,7 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
-  version: v2/1.17-SNAPSHOT
+  version: v2/1.18-SNAPSHOT
 paths:
   /api_versions:
     get:
@@ -98,6 +98,11 @@ paths:
         schema:
           type: string
           format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteStatementRequestBody'
       responses:
         "200":
           description: The request was successful.
@@ -314,6 +319,13 @@ components:
           $ref: '#/components/schemas/LogicalType'
         name:
           type: string
+    CompleteStatementRequestBody:
+      type: object
+      properties:
+        statement:
+          type: string
+        position:
+          type: integer
     CompleteStatementResponseBody:
       type: object
       properties:
