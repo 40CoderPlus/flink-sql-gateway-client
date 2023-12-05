@@ -8,12 +8,12 @@ buildscript {
     }
 
     dependencies {
-        classpath "org.openapitools:openapi-generator-gradle-plugin:6.2.1"
+        classpath "org.openapitools:openapi-generator-gradle-plugin:7.1.0"
 
-        classpath "com.palantir.baseline:gradle-baseline-java:4.147.0"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513"
-        classpath "com.diffplug.spotless:spotless-plugin-gradle:6.11.0"
-        classpath 'org.owasp:dependency-check-gradle:7.2.0'
+        classpath "com.palantir.baseline:gradle-baseline-java:5.31.0"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.4.1.3373"
+        classpath "com.diffplug.spotless:spotless-plugin-gradle:6.23.3"
+        classpath 'org.owasp:dependency-check-gradle:9.0.2'
     }
 }
 
