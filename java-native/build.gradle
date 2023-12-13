@@ -30,7 +30,7 @@ openApiGenerate {
     ]
 }
 
-task buildV1SDK(type: GenerateTask) {
+tasks.register('buildV1SDK', GenerateTask) {
     generatorName = 'java'
     library = 'native'
     inputSpec = "$rootDir/spec/rest_v1_sql_gateway.yml".toString()

@@ -218,7 +218,7 @@ public class BaseOperationRequestBuilder
 
         @Override
         public ExecuteStatementRequestBody build() {
-            Objects.requireNonNull(jobId, "Flink Job id can't be null");
+            Objects.requireNonNull(jobId, "Flink Job id can't be null when stop a job");
             statement(
                     withSavepoint
                             ? String.format(STOP_STATEMENT_WITH_SAVEPOINT_FORMATTER, jobId)
